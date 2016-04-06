@@ -5,13 +5,13 @@ require 'telegram/bot'
 require 'telegram/bot/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'telegram-bot-ruby'
+  spec.name          = 'faraday-telegram-bot-ruby'
   spec.version       = Telegram::Bot::VERSION
-  spec.authors       = ['Alexander Tipugin']
-  spec.email         = ['atipugin@gmail.com']
+  spec.authors       = ['Anton Prokhorov']
+  spec.email         = ['a.prokhorov@rambler-co.ru']
 
   spec.summary       = "Ruby wrapper for Telegram's Bot API"
-  spec.homepage      = 'https://github.com/atipugin/telegram-bot'
+  spec.homepage      = 'https://github.com/rambler-digital-solutions/telegram-bot-ruby'
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   spec.bindir        = 'exe'
@@ -21,7 +21,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'faraday'
   spec.add_dependency 'net-http-persistent'
   spec.add_dependency 'virtus'
-  spec.add_dependency 'pry-byebug'
 
   spec.add_development_dependency 'bundler', '~> 1.9'
   spec.add_development_dependency 'rake', '~> 10.0'
