@@ -1,8 +1,6 @@
 module Telegram
   module Bot
     class Api
-      include HTTMultiParty
-
       ENDPOINTS = %w(
         getMe sendMessage forwardMessage sendPhoto sendAudio sendDocument
         sendSticker sendVideo sendVoice sendLocation sendChatAction
@@ -23,14 +21,15 @@ module Telegram
       POOL_SIZE = ENV.fetch('TELEGRAM_BOT_POOL_SIZE', 1).to_i.freeze
 
       attr_reader :token
-
-      base_uri 'https://api.telegram.org'
-      persistent_connection_adapter pool_size: POOL_SIZE,
-                                    keep_alive: 30,
-                                    force_retry: true
+      attr_reader :http
 
       def initialize(token)
         @token = token
+
+        @http = Faraday.new(url: 'https://api.telegram.org') do |faraday|
+          faraday.request  :url_encoded
+          faraday.adapter  :net_http_persistent
+        end
       end
 
       def method_missing(method_name, *args, &block)
@@ -49,9 +48,10 @@ module Telegram
 
       def call(endpoint, raw_params = {})
         params = build_params(raw_params)
-        response = self.class.post("/bot#{token}/#{endpoint}", query: params)
-        if response.code == 200
-          response.to_hash
+        response = http.post("/bot#{token}/#{endpoint}", params)
+
+        if response.status == 200
+          JSON.parse(response.body)
         else
           fail Exceptions::ResponseError.new(response),
                'Telegram API has returned the error.'

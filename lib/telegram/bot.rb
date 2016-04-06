@@ -1,5 +1,6 @@
-require 'httmultiparty'
-require 'persistent_httparty'
+require 'faraday'
+require 'json'
+require 'logger'
 require 'virtus'
 
 require 'telegram/bot/types'
